@@ -1,0 +1,242 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+        
+    </head>
+    <body>
+
+        
+    </body>
+    <script type="text/javascript">
+        //고정수 제외수
+        var pluslist = [1,2];
+        var minuslist = [3,4];
+
+        //소수
+        var sosunum = 2;
+        var sosulist = [2,3,5,7,11,13,17,19,23,29,31,37,41,43];
+
+        //연번
+        var follownum = 10;
+
+        //끝수
+        var endnum = 2;
+
+        //가로 세로
+        var horizlist = [[1,2,3,4,5,6,7],[8,9,10,11,12,13,14],[15,16,17,18,19,20,21],[22,23,24,25,26,27,28],[29,30,31,32,33,34,35],[36,37,38,39,40,41,42],[43,44,45]];
+        var vertilist = [[1,8,15,22,29,36,43],[2,9,16,23,30,37,44],[3,10,17,24,31,38,45],[4,11,18,25,32,39],[5,12,19,26,33,40],[6,13,20,27,34,41],[7,14,21,28,35,42]];
+        var horiznum = 2;
+        var vertinum = 2;
+
+        //홀짝
+        var oddnum = 2;
+        var evennum = 6 - oddnum;
+
+        //생성 번호 & 번호판
+        var lotto = [];
+        var template = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45];
+
+        //고정수 입력 & 번호판에서 제외
+        for(var i=0; i<pluslist.length; i++){
+            lotto[i] = pluslist[i]; //pluslist 오름차순
+
+            const idx = template.indexOf(pluslist[i]);
+            if (idx > -1) template.splice(idx, 1);
+        }
+        //제외수 번호판에서 제외
+        for(var i=0; i<minuslist.length; i++){
+            const idx = template.indexOf(minuslist[i]);
+            if (idx > -1) template.splice(idx, 1);
+        }
+
+        
+
+        
+        while(lotto.length < 6){
+        //검사 변수
+        var tmp_sosunum = 0;
+        var tmp_follownum = 0;
+        var tmp_endnum = 0;
+        var tmp_horiznum = 0;
+        var tmp_vertinum = 0;
+        var tmp_oddnum = 0;
+        var tmp_evennum = 0;
+        var idx = 0;
+        //소수 검사
+        for(var i=0; i<lotto.length; i++){
+            for(var j=0; j<sosulist.length; j++){
+                if(lotto[i] == sosulist[j]){
+                    tmp_sosunum++;
+                }
+            }
+        }
+        if(tmp_sosunum > sosunum){
+            alert('소수error');
+            
+        }
+        if(tmp_sosunum == sosunum){
+            for(var j=0; j<sosulist.length; j++){
+                idx = template.indexOf(sosulist[j]);
+                if (idx > -1) template.splice(idx, 1);
+            }
+        }
+
+        
+
+
+
+
+
+
+        //연번 검사
+        for(var i=0; i<lotto.length-1; i++){
+            if(lotto[i+1] - lotto[i] == 1){
+                tmp_follownum++;
+            }
+        }
+        if(tmp_follownum > follownum){
+            alert('연번error');
+        }
+        if(tmp_follownum == follownum){
+            for(var j=0; j<lotto.length; j++){
+                idx = template.indexOf(lotto[j]+1);
+                if (idx > -1) template.splice(idx, 1);
+                idx = template.indexOf(lotto[j]-1);
+                if (idx > -1) template.splice(idx, 1);
+            }
+        }
+
+
+
+
+        //끝수 검사
+        var endtemplate = [0,0,0,0,0,0,0,0,0,0];
+        for(var i=0; i<lotto.length; i++){
+            endtemplate[lotto[i]%10]++;
+        }
+        for(var i=0; i<endtemplate.length; i++){
+            switch (endtemplate[i]) {
+                case 2: 
+                    tmp_endnum += 1;
+                    break;
+                case 3: 
+                    tmp_endnum += 3;
+                    break;
+                case 4: 
+                    tmp_endnum += 6;
+                    break;
+                case 5: 
+                    tmp_endnum += 10;
+                    break;
+            }
+        }
+        if(tmp_endnum > endnum){
+            alert('끝수error');
+        }
+        endtemplate = [0,0,0,0,0,0,0,0,0,0];
+        if(tmp_endnum == endnum){
+            for(var j=0; j<lotto.length; j++){
+                endtemplate[lotto[j]%10]++;
+            }
+        }
+        for(var i=0; i<endtemplate.length; i++){
+            if(endtemplate[i] > 1){
+                for(var j=0; j<template.length; j++){
+                    if(template[j]%10 == i){
+                        idx = template.indexOf(template[j]);
+                        if (idx > -1) template.splice(idx, 1);
+                    }
+                }
+            }
+        }
+
+
+
+
+
+        //가로 검사
+        for(var i=0; i<horizlist.length; i++){
+            tmp_horiznum = 0; //초기화
+            for(var j=0; j<lotto.length; j++){
+                if(horizlist[i].includes(lotto[j])){
+                    tmp_horiznum++;
+                    console.log(tmp_horiznum);
+                }
+            }
+            if(tmp_horiznum > horiznum){
+                alert('가로error');
+                break;
+            }else if(tmp_horiznum == horiznum){
+                for(var k=0; k<horizlist[i].length; k++){
+                    idx = template.indexOf(horizlist[i][k]);
+                    if (idx > -1) template.splice(idx, 1);
+                }
+            }
+        }
+        //세로 검사
+        for(var i=0; i<vertilist.length; i++){
+            tmp_vertinum = 0; //초기화
+            for(var j=0; j<lotto.length; j++){
+                if(vertilist[i].includes(lotto[j])){
+                    tmp_vertinum++;
+                    console.log(tmp_vertinum);
+                }
+            }
+            if(tmp_vertinum > vertinum){
+                alert('세로error');
+                break;
+            }else if(tmp_vertinum == vertinum){
+                for(var k=0; k<vertilist[i].length; k++){
+                    idx = template.indexOf(vertilist[i][k]);
+                    if (idx > -1) template.splice(idx, 1);
+                }
+            }
+        }
+        
+
+
+
+
+
+        //홀수 검사
+        for(var j=0; j<lotto.length; j++){
+            if(lotto[j]%2 == 1){
+                tmp_oddnum++;
+            }else{
+                tmp_evennum++;
+            }
+            
+        }
+        if(tmp_oddnum > oddnum || tmp_evennum > evennum){
+            alert('홀짝error');
+        }
+        if(tmp_oddnum == oddnum){
+            for(var j=0; j<template.length; j++){
+                if(template[j]%2 == 1){
+                    idx = template.indexOf(template[j]);
+                    if (idx > -1) template.splice(idx, 1);
+                }
+            }
+        }
+        if(tmp_evennum == evennum){
+            for(var j=0; j<template.length; j++){
+                if(template[j]%2 == 0){
+                    idx = template.indexOf(template[j]);
+                    if (idx > -1) template.splice(idx, 1);
+                }
+            }
+        }
+
+        
+        var RandVal = Math.floor(Math.random()*(template.length));
+        lotto[lotto.length] = template[RandVal];
+        
+        console.log("lotto : " + lotto);
+        console.log("template : " + template);
+        
+    }
+
+       
+    </script>
+</html>
